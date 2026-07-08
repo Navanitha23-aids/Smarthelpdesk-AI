@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Helpdesk AI – Help Centre</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="sidebar.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;}
+.topbar{
+  background:#fff;padding:16px 32px;
+  border-bottom:1px solid #e5e7eb;
+}
+.topbar h1{font-size:20px;font-weight:700;color:#0a0f1e;}
+.topbar p{font-size:13px;color:#9ca3af;margin-top:2px;}
+.content{padding:28px 32px;}
+
+/* HERO SEARCH */
+.hc-hero{
+  background:linear-gradient(135deg,#0a0f1e,#0d1b3e);
+  border-radius:16px;padding:44px 36px;text-align:center;
+  margin-bottom:30px;position:relative;overflow:hidden;
+}
+.hc-hero::before{
+  content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  width:400px;height:250px;
+  background:radial-gradient(ellipse,rgba(0,114,255,0.18) 0%,transparent 70%);
+}
+.hc-hero h2{font-size:26px;font-weight:800;color:#fff;margin-bottom:8px;position:relative;}
+.hc-hero p{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px;position:relative;}
+.search-box{
+  display:flex;max-width:500px;margin:0 auto;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:12px;overflow:hidden;position:relative;
+}
+.search-box i{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  color:rgba(255,255,255,0.4);font-size:20px;
+}
+.search-box input{
+  flex:1;padding:14px 14px 14px 48px;
+  background:transparent;border:none;
+  color:#fff;font-size:14px;font-family:'Poppins',sans-serif;outline:none;
+}
+.search-box input::placeholder{color:rgba(255,255,255,0.35);}
+.search-box button{
+  padding:0 22px;
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  color:#fff;border:none;font-size:14px;font-weight:600;
+  cursor:pointer;font-family:'Poppins',sans-serif;
+}
+
+/* CATEGORY GRID */
+.cat-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;margin-bottom:30px;
+}
+.cat-card{
+  background:#fff;border-radius:14px;border:1px solid #e5e7eb;
+  padding:22px 16px;text-align:center;cursor:pointer;
+  transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;
+}
+.cat-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,0.08);border-color:#0072ff;}
+.cat-icon{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;
+}
+.cat-icon i{font-size:24px;}
+.cat-card h4{font-size:13px;font-weight:700;color:#0a0f1e;margin-bottom:4px;}
+.cat-card p{font-size:11px;color:#9ca3af;}
+
+/* FAQ */
+.two-col{display:grid;grid-template-columns:1.5fr 1fr;gap:20px;}
+.card{background:#fff;border-radius:14px;border:1px solid #e5e7eb;overflow:hidden;}
+.card-hdr{
+  padding:16px 22px;border-bottom:1px solid #f3f3f3;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-hdr h3{font-size:15px;font-weight:700;color:#0a0f1e;}
+
+.faq-item{border-bottom:1px solid #f5f5f5;}
+.faq-item:last-child{border:none;}
+.faq-q{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 22px;cursor:pointer;
+  font-size:14px;font-weight:600;color:#0a0f1e;
+  transition:background 0.2s;
+}
+.faq-q:hover{background:#fafbff;}
+.faq-q i{font-size:18px;color:#9ca3af;transition:transform 0.2s;flex-shrink:0;}
+.faq-a{
+  display:none;padding:0 22px 16px;
+  font-size:13px;color:#6b7280;line-height:1.7;
+}
+.faq-item.open .faq-q i{transform:rotate(180deg);}
+.faq-item.open .faq-a{display:block;}
+
+/* CONTACT CARDS */
+.contact-list{padding:16px;display:flex;flex-direction:column;gap:12px;}
+.contact-card{
+  border-radius:12px;padding:16px;
+  display:flex;align-items:center;gap:14px;
+  border:1px solid #e5e7eb;transition:box-shadow 0.2s;cursor:pointer;
+}
+.contact-card:hover{box-shadow:0 4px 14px rgba(0,0,0,0.07);}
+.cc-icon{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.cc-icon i{font-size:22px;}
+.cc-title{font-size:14px;font-weight:600;color:#0a0f1e;}
+.cc-sub{font-size:12px;color:#9ca3af;margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="layout" id="layout">
+<div class="main">
+
+  <div class="topbar">
+    <h1>Help Centre</h1>
+    <p>Knowledge base, FAQs & support resources</p>
+  </div>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hc-hero">
+      <h2>How can we help you?</h2>
+      <p>Search our knowledge base or browse categories below</p>
+      <div class="search-box">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Search for answers...">
+        <button>Search</button>
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="cat-grid">
+      <div class="cat-card">
+        <div class="cat-icon" style="background:#e8f4ff"><i class="ti ti-wifi" style="color:#0072ff"></i></div>
+        <h4>Network / VPN</h4>
+        <p>12 articles</p>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon" style="background:#f3f0ff"><i class="ti ti-lock" style="color:#7b2ff7"></i></div>
+        <h4>Passwords & Access</h4>
+        <p>8 articles</p>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon" style="background:#d4f7ea"><i class="ti ti-mail" style="color:#038c5a"></i></div>
+        <h4>Email & Outlook</h4>
+        <p>10 articles</p>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon" style="background:#fff3cd"><i class="ti ti-device-laptop" style="color:#e67e00"></i></div>
+        <h4>Hardware Setup</h4>
+        <p>7 articles</p>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon" style="background:#fff0f0"><i class="ti ti-apps" style="color:#c0392b"></i></div>
+        <h4>Software & Apps</h4>
+        <p>15 articles</p>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon" style="background:#e8f4ff"><i class="ti ti-printer" style="color:#0072ff"></i></div>
+        <h4>Printers</h4>
+        <p>5 articles</p>
+      </div>
+    </div>
+
+    <!-- FAQ + CONTACT -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-hdr"><h3>Frequently Asked Questions</h3></div>
+        <div id="faqList">
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How do I reset my company password? <i class="ti ti-chevron-down"></i></div>
+            <div class="faq-a">Go to the login page and click "Forgot Password". Enter your company email and follow the instructions sent to you. If you don't receive an email within 5 minutes, raise a ticket.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">My VPN is not connecting. What should I do? <i class="ti ti-chevron-down"></i></div>
+            <div class="faq-a">First, ensure you have a stable internet connection. Try restarting the VPN client. If the issue persists, check if your VPN certificate has expired and raise a ticket with priority set to High.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How long does it take to resolve a ticket? <i class="ti ti-chevron-down"></i></div>
+            <div class="faq-a">Critical tickets are addressed within 1 hour, High within 4 hours, Medium within 1 business day, and Low within 3 business days. Our AI Resolution Rate is currently 72%.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">My Outlook email is not syncing. How to fix? <i class="ti ti-chevron-down"></i></div>
+            <div class="faq-a">Go to File → Account Settings → Repair your account. If that doesn't work, try removing and re-adding your account. Still stuck? Raise an Email Issue ticket and our team will assist.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How do I request a new software license? <i class="ti ti-chevron-down"></i></div>
+            <div class="faq-a">Create a ticket with the category "Software Request", mention the software name and business justification. Approval typically takes 1–2 business days.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How do I track my submitted ticket? <i class="ti ti-chevron-down"></i></div>
+            <div class="faq-a">Go to "My Tickets" in the sidebar. You can filter by status: Open, In Progress, Solved, or Not Viewed. Click the eye icon on any ticket to view full details.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hdr"><h3>Contact Support</h3></div>
+        <div class="contact-list">
+          <div class="contact-card">
+            <div class="cc-icon" style="background:#e8f4ff"><i class="ti ti-ticket" style="color:#0072ff"></i></div>
+            <div>
+              <div class="cc-title">Raise a Ticket</div>
+              <div class="cc-sub">Get help from our IT team</div>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="cc-icon" style="background:#d4f7ea"><i class="ti ti-message-circle" style="color:#038c5a"></i></div>
+            <div>
+              <div class="cc-title">Live Chat</div>
+              <div class="cc-sub">Available Mon–Fri, 9 AM–6 PM</div>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="cc-icon" style="background:#f3f0ff"><i class="ti ti-mail" style="color:#7b2ff7"></i></div>
+            <div>
+              <div class="cc-title">Email Support</div>
+              <div class="cc-sub">it-support@company.com</div>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="cc-icon" style="background:#fff3cd"><i class="ti ti-phone" style="color:#e67e00"></i></div>
+            <div>
+              <div class="cc-title">Call IT Helpdesk</div>
+              <div class="cc-sub">Ext. 1234 | 24/7 for Critical</div>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="cc-icon" style="background:#fff0f0"><i class="ti ti-robot" style="color:#c0392b"></i></div>
+            <div>
+              <div class="cc-title">AI Assistant</div>
+              <div class="cc-sub">Instant automated help</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+initSidebar('helpcenter');
+function toggleFaq(el){
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>

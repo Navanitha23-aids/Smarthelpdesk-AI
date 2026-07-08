@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Helpdesk AI – My Tickets</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="sidebar.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;}
+.topbar{
+  background:#fff;padding:16px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid #e5e7eb;
+}
+.topbar h1{font-size:20px;font-weight:700;color:#0a0f1e;}
+.topbar p{font-size:13px;color:#9ca3af;margin-top:2px;}
+.btn-new{
+  padding:9px 18px;background:linear-gradient(135deg,#00c6ff,#0072ff);
+  color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:'Poppins',sans-serif;
+  display:flex;align-items:center;gap:6px;
+}
+.content{padding:28px 32px;}
+
+/* FILTER TABS */
+.filter-bar{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:22px;flex-wrap:wrap;
+}
+.filter-btn{
+  padding:8px 18px;border-radius:20px;
+  border:1.5px solid #e5e7eb;background:#fff;
+  font-size:13px;font-weight:600;cursor:pointer;
+  font-family:'Poppins',sans-serif;color:#6b7280;
+  transition:all 0.2s;display:flex;align-items:center;gap:6px;
+}
+.filter-btn.active{border-color:#0072ff;background:#e8f4ff;color:#0072ff;}
+.filter-btn:hover{border-color:#0072ff;color:#0072ff;}
+.count-pill{
+  background:#f0f4ff;color:#0072ff;
+  padding:1px 7px;border-radius:10px;font-size:11px;
+}
+
+.search-bar{
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
+}
+.search-wrap{position:relative;flex:1;max-width:360px;}
+.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:18px;}
+.search-wrap input{
+  width:100%;padding:10px 14px 10px 40px;
+  border:1.5px solid #e5e7eb;border-radius:10px;
+  font-size:14px;font-family:'Poppins',sans-serif;
+  outline:none;background:#fff;color:#0a0f1e;
+}
+.search-wrap input:focus{border-color:#0072ff;}
+
+/* TICKET CARDS */
+.tickets-list{display:flex;flex-direction:column;gap:14px;}
+.ticket-card{
+  background:#fff;border-radius:14px;
+  border:1px solid #e5e7eb;padding:20px 22px;
+  display:flex;align-items:center;gap:18px;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.ticket-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.07);}
+.tc-id{
+  font-size:13px;font-weight:700;color:#0072ff;
+  background:#e8f4ff;padding:4px 10px;border-radius:7px;white-space:nowrap;
+}
+.tc-body{flex:1;}
+.tc-title{font-size:15px;font-weight:600;color:#0a0f1e;margin-bottom:5px;}
+.tc-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.tc-meta span{font-size:12px;color:#6b7280;display:flex;align-items:center;gap:4px;}
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 11px;border-radius:20px;
+  font-size:11px;font-weight:700;
+}
+.b-open    {background:#e8f4ff;color:#0072ff;}
+.b-progress{background:#fff3cd;color:#d4851a;}
+.b-solved  {background:#d4f7ea;color:#038c5a;}
+.b-notview {background:#f3f0ff;color:#7b2ff7;}
+.pri{
+  padding:3px 9px;border-radius:6px;
+  font-size:11px;font-weight:700;
+  display:inline-flex;align-items:center;gap:4px;
+}
+.p-high{background:#fff0f0;color:#c0392b;}
+.p-med {background:#fff8e8;color:#e67e00;}
+.p-low {background:#e8fff4;color:#038c5a;}
+.tc-action{
+  width:34px;height:34px;border-radius:9px;
+  background:#f0f4ff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:#0072ff;font-size:18px;transition:background 0.2s;
+}
+.tc-action:hover{background:#e0eaff;}
+
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="layout" id="layout">
+<div class="main">
+
+  <div class="topbar">
+    <div>
+      <h1>My Tickets</h1>
+      <p>Track and manage all your support requests</p>
+    </div>
+    <button class="btn-new" onclick="window.location.href='create.html'">
+      <i class="ti ti-plus"></i> New Ticket
+    </button>
+  </div>
+
+  <div class="content">
+
+    <!-- FILTERS -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterTickets('all',this)">
+        All <span class="count-pill">6</span>
+      </button>
+      <button class="filter-btn" onclick="filterTickets('open',this)">
+        <i class="ti ti-circle" style="color:#0072ff"></i> Open
+      </button>
+      <button class="filter-btn" onclick="filterTickets('progress',this)">
+        <i class="ti ti-clock" style="color:#e67e00"></i> In Progress
+      </button>
+      <button class="filter-btn" onclick="filterTickets('solved',this)">
+        <i class="ti ti-circle-check" style="color:#038c5a"></i> Solved
+      </button>
+      <button class="filter-btn" onclick="filterTickets('notview',this)">
+        <i class="ti ti-eye-off" style="color:#7b2ff7"></i> Not Viewed
+      </button>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-bar">
+      <div class="search-wrap">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Search tickets..." id="searchInput" oninput="searchTickets()">
+      </div>
+    </div>
+
+    <!-- TICKETS -->
+    <div class="tickets-list" id="ticketsList">
+
+      <div class="ticket-card" data-status="open">
+        <span class="tc-id">#101</span>
+        <div class="tc-body">
+          <div class="tc-title">VPN Access Error</div>
+          <div class="tc-meta">
+            <span><i class="ti ti-calendar"></i> Today, 9:12 AM</span>
+            <span><i class="ti ti-clock"></i> Deadline: Today, 5:00 PM</span>
+            <span class="pri p-high"><i class="ti ti-flame"></i> High</span>
+            <span class="badge b-open">Open</span>
+          </div>
+        </div>
+        <button class="tc-action"><i class="ti ti-eye"></i></button>
+      </div>
+
+      <div class="ticket-card" data-status="solved">
+        <span class="tc-id">#102</span>
+        <div class="tc-body">
+          <div class="tc-title">Password Reset</div>
+          <div class="tc-meta">
+            <span><i class="ti ti-calendar"></i> Today, 8:45 AM</span>
+            <span><i class="ti ti-clock"></i> Resolved in 30 min</span>
+            <span class="pri p-low"><i class="ti ti-leaf"></i> Low</span>
+            <span class="badge b-solved">Solved</span>
+          </div>
+        </div>
+        <button class="tc-action"><i class="ti ti-eye"></i></button>
+      </div>
+
+      <div class="ticket-card" data-status="progress">
+        <span class="tc-id">#103</span>
+        <div class="tc-body">
+          <div class="tc-title">Email Not Working</div>
+          <div class="tc-meta">
+            <span><i class="ti ti-calendar"></i> Yesterday</span>
+            <span><i class="ti ti-clock"></i> Deadline: Tomorrow</span>
+            <span class="pri p-med"><i class="ti ti-alert-triangle"></i> Medium</span>
+            <span class="badge b-progress">In Progress</span>
+          </div>
+        </div>
+        <button class="tc-action"><i class="ti ti-eye"></i></button>
+      </div>
+
+      <div class="ticket-card" data-status="notview">
+        <span class="tc-id">#104</span>
+        <div class="tc-body">
+          <div class="tc-title">Printer Offline – 3rd Floor</div>
+          <div class="tc-meta">
+            <span><i class="ti ti-calendar"></i> Yesterday</span>
+            <span><i class="ti ti-clock"></i> No deadline set</span>
+            <span class="pri p-med"><i class="ti ti-alert-triangle"></i> Medium</span>
+            <span class="badge b-notview">Not Viewed</span>
+          </div>
+        </div>
+        <button class="tc-action"><i class="ti ti-eye"></i></button>
+      </div>
+
+      <div class="ticket-card" data-status="solved">
+        <span class="tc-id">#105</span>
+        <div class="tc-body">
+          <div class="tc-title">Software License Renewal</div>
+          <div class="tc-meta">
+            <span><i class="ti ti-calendar"></i> Jun 20</span>
+            <span><i class="ti ti-clock"></i> Resolved in 1 day</span>
+            <span class="pri p-low"><i class="ti ti-leaf"></i> Low</span>
+            <span class="badge b-solved">Solved</span>
+          </div>
+        </div>
+        <button class="tc-action"><i class="ti ti-eye"></i></button>
+      </div>
+
+      <div class="ticket-card" data-status="open">
+        <span class="tc-id">#100</span>
+        <div class="tc-body">
+          <div class="tc-title">New Laptop Setup Request</div>
+          <div class="tc-meta">
+            <span><i class="ti ti-calendar"></i> Jun 18</span>
+            <span><i class="ti ti-clock"></i> Deadline: Jun 25</span>
+            <span class="pri p-high"><i class="ti ti-flame"></i> High</span>
+            <span class="badge b-open">Open</span>
+          </div>
+        </div>
+        <button class="tc-action"><i class="ti ti-eye"></i></button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+initSidebar('tickets');
+let currentFilter = 'all';
+function filterTickets(status, btn){
+  currentFilter = status;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+}
+function applyFilter(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.ticket-card').forEach(card=>{
+    const s = card.dataset.status;
+    const t = card.querySelector('.tc-title').textContent.toLowerCase();
+    const matchStatus = currentFilter==='all' || s===currentFilter;
+    const matchSearch = t.includes(q);
+    card.classList.toggle('hidden', !(matchStatus && matchSearch));
+  });
+}
+function searchTickets(){ applyFilter(); }
+</script>
+</body>
+</html>

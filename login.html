@@ -1,38 +1,273 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Smart Helpdesk AI</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Helpdesk AI – Login</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Poppins',sans-serif;
+  min-height:100vh;
+  display:flex;
+  background:linear-gradient(160deg,#0a0f1e 0%,#0d1b3e 55%,#0a2a4a 100%);
+  overflow:hidden;
+}
+
+/* LEFT PANEL */
+.left-panel{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:60px 70px;
+  position:relative;
+}
+.left-panel::before{
+  content:'';
+  position:absolute;top:-120px;left:-80px;
+  width:450px;height:450px;
+  background:radial-gradient(circle,rgba(0,114,255,0.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+.left-panel::after{
+  content:'';
+  position:absolute;bottom:-80px;left:100px;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(123,47,247,0.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:52px;
+}
+.brand-icon{
+  width:46px;height:46px;
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+}
+.brand-icon i{color:#fff;font-size:24px;}
+.brand-name{font-size:20px;font-weight:700;color:#fff;}
+.hero-title{
+  font-size:48px;font-weight:800;color:#fff;
+  line-height:1.15;margin-bottom:18px;
+}
+.hero-title span{
+  background:linear-gradient(135deg,#00c6ff,#7b2ff7,#38ef7d);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:16px;color:rgba(255,255,255,0.55);
+  line-height:1.8;max-width:420px;margin-bottom:44px;
+}
+.features{display:flex;flex-direction:column;gap:16px;}
+.feat-item{
+  display:flex;align-items:center;gap:14px;
+}
+.feat-dot{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.feat-dot i{font-size:20px;}
+.feat-text{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;}
+
+.stats-row{
+  display:flex;gap:32px;margin-top:52px;
+}
+.stat-box{text-align:center;}
+.stat-box h3{font-size:26px;font-weight:800;color:#fff;}
+.stat-box p{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;}
+
+/* RIGHT PANEL */
+.right-panel{
+  width:620px;flex-shrink:0;
+  background:rgba(255,255,255,0.03);
+  backdrop-filter:blur(20px);
+  border-left:1px solid rgba(255,255,255,0.07);
+  display:flex;align-items:center;justify-content:center;
+  padding:56px 64px;
+}
+.login-card{width:100%;}
+.login-card h2{font-size:28px;font-weight:800;color:#fff;margin-bottom:6px;}
+.login-card .sub{font-size:14px;color:rgba(255,255,255,0.45);margin-bottom:36px;}
+
+.form-group{margin-bottom:18px;}
+label{display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);margin-bottom:7px;}
+.input-wrap{position:relative;}
+.input-wrap i{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  color:rgba(255,255,255,0.3);font-size:18px;
+}
+input[type=email],input[type=password],input[type=text]{
+  width:100%;padding:13px 14px 13px 44px;
+  background:rgba(255,255,255,0.06);
+  border:1.5px solid rgba(255,255,255,0.1);
+  border-radius:10px;color:#fff;
+  font-size:14px;font-family:'Poppins',sans-serif;
+  outline:none;transition:border 0.2s,background 0.2s;
+}
+input::placeholder{color:rgba(255,255,255,0.25);}
+input:focus{border-color:#0072ff;background:rgba(0,114,255,0.08);}
+
+.row-between{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:22px;
+}
+.remember{display:flex;align-items:center;gap:7px;font-size:13px;color:rgba(255,255,255,0.45);cursor:pointer;}
+.remember input{width:15px;height:15px;accent-color:#0072ff;padding:0;}
+.forgot{font-size:13px;color:#00c6ff;text-decoration:none;font-weight:500;}
+
+.btn-login{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  color:#fff;border:none;border-radius:10px;
+  font-size:15px;font-weight:700;cursor:pointer;
+  font-family:'Poppins',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 24px rgba(0,114,255,0.35);
+  transition:opacity 0.2s,transform 0.2s;
+}
+.btn-login:hover{opacity:0.9;transform:translateY(-1px);}
+
+.divider{
+  display:flex;align-items:center;gap:12px;
+  margin:24px 0;
+}
+.divider span{font-size:12px;color:rgba(255,255,255,0.3);white-space:nowrap;}
+.divider::before,.divider::after{
+  content:'';flex:1;height:1px;background:rgba(255,255,255,0.1);
+}
+
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.role-card{
+  padding:12px 10px;border-radius:10px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);
+  cursor:pointer;text-align:center;transition:all 0.2s;
+}
+.role-card:hover{border-color:#0072ff;background:rgba(0,114,255,0.1);}
+.role-card i{font-size:22px;display:block;margin-bottom:5px;}
+.role-card span{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);}
+
+@media(max-width:900px){
+  body{flex-direction:column;}
+  .left-panel{padding:40px 28px;flex:none;}
+  .right-panel{width:100%;border-left:none;border-top:1px solid rgba(255,255,255,0.07);}
+  .hero-title{font-size:32px;}
+}
+</style>
 </head>
 <body>
 
-<div class="hero">
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <div class="brand">
+    <div class="brand-icon"><i class="ti ti-ticket"></i></div>
+    <span class="brand-name">Smart Helpdesk AI</span>
+  </div>
 
-    <div class="hero-content">
+  <h1 class="hero-title">AI Powered IT<br><span>Ticketing & Support</span><br>Platform</h1>
+  <p class="hero-sub">Resolve IT issues faster with intelligent ticket management. Our AI automatically classifies, assigns, and tracks every support request so your team can focus on what matters.</p>
 
-        <h1>Smart Helpdesk AI</h1>
-
-        <p>
-            AI Powered IT Ticketing & Support Platform
-        </p>
-
-        <div class="login-box">
-
-            <h2>Employee Login</h2>
-
-            <input type="email" placeholder="Company Email">
-
-            <input type="password" placeholder="Password">
-
-            <button onclick="location.href='dashboard.html'">
-                Login
-            </button>
-
-        </div>
-
+  <div class="features">
+    <div class="feat-item">
+      <div class="feat-dot" style="background:rgba(0,198,255,0.15)">
+        <i class="ti ti-robot" style="color:#00c6ff"></i>
+      </div>
+      <span class="feat-text">AI auto-classifies and routes tickets instantly</span>
     </div>
+    <div class="feat-item">
+      <div class="feat-dot" style="background:rgba(56,239,125,0.12)">
+        <i class="ti ti-chart-bar" style="color:#38ef7d"></i>
+      </div>
+      <span class="feat-text">Real-time dashboard with full ticket visibility</span>
+    </div>
+    <div class="feat-item">
+      <div class="feat-dot" style="background:rgba(123,47,247,0.15)">
+        <i class="ti ti-help-circle" style="color:#7b2ff7"></i>
+      </div>
+      <span class="feat-text">Knowledge base & help centre for self-service</span>
+    </div>
+    <div class="feat-item">
+      <div class="feat-dot" style="background:rgba(230,126,0,0.15)">
+        <i class="ti ti-history" style="color:#e67e00"></i>
+      </div>
+      <span class="feat-text">Complete history & audit trail of all tickets</span>
+    </div>
+  </div>
 
+  <div class="stats-row">
+    <div class="stat-box"><h3>125</h3><p>Tickets Resolved</p></div>
+    <div class="stat-box"><h3>72%</h3><p>AI Resolution Rate</p></div>
+    <div class="stat-box"><h3>24/7</h3><p>Always On</p></div>
+  </div>
 </div>
 
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="login-card">
+    <h2>Employee Login</h2>
+    <p class="sub">Sign in to your company account</p>
+
+    <div class="form-group">
+      <label>Company Email</label>
+      <div class="input-wrap">
+        <i class="ti ti-mail"></i>
+        <input type="email" placeholder="you@company.com" id="emailInput">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-wrap">
+        <i class="ti ti-lock"></i>
+        <input type="password" placeholder="Enter your password" id="passInput">
+      </div>
+    </div>
+
+    <div class="row-between">
+      <label class="remember">
+        <input type="checkbox"> Remember me
+      </label>
+      <a href="#" class="forgot">Forgot password?</a>
+    </div>
+
+    <button class="btn-login" onclick="doLogin()">
+      Login <i class="ti ti-arrow-right"></i>
+    </button>
+
+    <div class="divider"><span>or quick login as</span></div>
+
+    <div class="role-grid">
+      <div class="role-card" onclick="window.location.href='dashboard.html'">
+        <i class="ti ti-user" style="color:#00c6ff"></i>
+        <span>Employee</span>
+      </div>
+      <div class="role-card" onclick="window.location.href='dashboard.html'">
+        <i class="ti ti-settings" style="color:#7b2ff7"></i>
+        <span>Admin</span>
+      </div>
+      <div class="role-card" onclick="window.location.href='dashboard.html'">
+        <i class="ti ti-tool" style="color:#038c5a"></i>
+        <span>Engineer</span>
+      </div>
+      <div class="role-card" onclick="window.location.href='dashboard.html'">
+        <i class="ti ti-chart-bar" style="color:#e67e00"></i>
+        <span>Manager</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function doLogin(){
+  const email = document.getElementById('emailInput').value.trim();
+  const pass  = document.getElementById('passInput').value.trim();
+  if(!email || !pass){ alert('Please enter your email and password.'); return; }
+  window.location.href = 'dashboard.html';
+}
+</script>
 </body>
 </html>

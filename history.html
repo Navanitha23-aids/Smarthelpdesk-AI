@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Helpdesk AI – History</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="sidebar.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;}
+.topbar{
+  background:#fff;padding:16px 32px;
+  border-bottom:1px solid #e5e7eb;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar h1{font-size:20px;font-weight:700;color:#0a0f1e;}
+.topbar p{font-size:13px;color:#9ca3af;margin-top:2px;}
+.export-btn{
+  padding:9px 18px;background:#fff;
+  border:1.5px solid #e5e7eb;border-radius:9px;
+  font-size:13px;font-weight:600;color:#374151;
+  cursor:pointer;font-family:'Poppins',sans-serif;
+  display:flex;align-items:center;gap:6px;
+}
+.export-btn:hover{border-color:#0072ff;color:#0072ff;}
+.content{padding:28px 32px;}
+
+/* SUMMARY ROW */
+.summary-row{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:14px;margin-bottom:26px;
+}
+.sum-card{
+  background:#fff;border-radius:12px;
+  padding:16px 18px;border:1px solid #e5e7eb;
+  display:flex;align-items:center;gap:12px;
+}
+.sum-ic{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.sum-ic i{font-size:20px;}
+.sum-val{font-size:22px;font-weight:800;color:#0a0f1e;}
+.sum-lbl{font-size:11px;color:#9ca3af;margin-top:2px;}
+
+/* TABLE CARD */
+.card{background:#fff;border-radius:14px;border:1px solid #e5e7eb;overflow:hidden;}
+.card-hdr{
+  padding:16px 22px;border-bottom:1px solid #f3f3f3;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+}
+.card-hdr h3{font-size:15px;font-weight:700;color:#0a0f1e;}
+.toolbar{display:flex;align-items:center;gap:10px;}
+.search-wrap{position:relative;}
+.search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:16px;}
+.search-wrap input{
+  padding:8px 12px 8px 34px;
+  border:1.5px solid #e5e7eb;border-radius:8px;
+  font-size:13px;font-family:'Poppins',sans-serif;
+  outline:none;color:#0a0f1e;width:200px;
+}
+.search-wrap input:focus{border-color:#0072ff;}
+select.filter-sel{
+  padding:8px 12px;border:1.5px solid #e5e7eb;
+  border-radius:8px;font-size:13px;
+  font-family:'Poppins',sans-serif;outline:none;color:#374151;cursor:pointer;
+}
+select.filter-sel:focus{border-color:#0072ff;}
+
+table{width:100%;border-collapse:collapse;}
+th{
+  padding:11px 16px;text-align:left;
+  font-size:11px;font-weight:700;color:#9ca3af;
+  text-transform:uppercase;letter-spacing:0.06em;
+  background:#fafafa;border-bottom:1px solid #f0f0f0;
+}
+td{padding:13px 16px;font-size:13px;color:#374151;border-bottom:1px solid #f8f8f8;vertical-align:middle;}
+tr:last-child td{border:none;}
+tr:hover td{background:#fafbff;}
+
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;
+}
+.b-open    {background:#e8f4ff;color:#0072ff;}
+.b-progress{background:#fff3cd;color:#d4851a;}
+.b-solved  {background:#d4f7ea;color:#038c5a;}
+.b-notview {background:#f3f0ff;color:#7b2ff7;}
+.pri{
+  padding:3px 9px;border-radius:6px;
+  font-size:11px;font-weight:700;
+  display:inline-flex;align-items:center;gap:4px;
+}
+.p-high{background:#fff0f0;color:#c0392b;}
+.p-med {background:#fff8e8;color:#e67e00;}
+.p-low {background:#e8fff4;color:#038c5a;}
+.p-crit{background:#1a0000;color:#ff4444;}
+
+.action-row{display:flex;align-items:center;gap:6px;}
+.act-btn{
+  width:30px;height:30px;border-radius:7px;border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:15px;transition:background 0.2s;
+}
+.act-view{background:#e8f4ff;color:#0072ff;}
+.act-view:hover{background:#cce4ff;}
+
+/* MODAL */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.45);z-index:999;
+  align-items:center;justify-content:center;
+}
+.overlay.show{display:flex;}
+.modal{
+  background:#fff;border-radius:18px;
+  padding:0;max-width:520px;width:92%;overflow:hidden;
+}
+.modal-hdr{
+  background:linear-gradient(135deg,#0a0f1e,#0d1b3e);
+  padding:22px 26px;display:flex;align-items:center;justify-content:space-between;
+}
+.modal-hdr h3{font-size:17px;font-weight:700;color:#fff;}
+.modal-close{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(255,255,255,0.1);border:none;
+  color:#fff;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-body{padding:24px 26px;}
+.detail-row{
+  display:flex;align-items:flex-start;gap:14px;
+  margin-bottom:16px;padding-bottom:16px;
+  border-bottom:1px solid #f0f0f0;
+}
+.detail-row:last-child{border:none;margin-bottom:0;padding-bottom:0;}
+.detail-lbl{font-size:12px;font-weight:700;color:#9ca3af;width:110px;flex-shrink:0;margin-top:2px;}
+.detail-val{font-size:13px;color:#0a0f1e;flex:1;line-height:1.6;}
+
+.timeline{padding:0 26px 24px;}
+.tl-title{font-size:13px;font-weight:700;color:#0a0f1e;margin-bottom:14px;}
+.tl-item{display:flex;gap:12px;margin-bottom:14px;}
+.tl-dot{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.tl-dot i{font-size:14px;}
+.tl-text{font-size:13px;color:#374151;line-height:1.5;}
+.tl-time{font-size:11px;color:#9ca3af;margin-top:2px;}
+
+.hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="layout" id="layout">
+<div class="main">
+
+  <div class="topbar">
+    <div>
+      <h1>Ticket History</h1>
+      <p>Complete audit trail of all your support requests</p>
+    </div>
+    <button class="export-btn"><i class="ti ti-download"></i> Export CSV</button>
+  </div>
+
+  <div class="content">
+
+    <!-- SUMMARY -->
+    <div class="summary-row">
+      <div class="sum-card">
+        <div class="sum-ic" style="background:#e8f4ff"><i class="ti ti-ticket" style="color:#0072ff"></i></div>
+        <div><div class="sum-val">125</div><div class="sum-lbl">Total Raised</div></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-ic" style="background:#d4f7ea"><i class="ti ti-circle-check" style="color:#038c5a"></i></div>
+        <div><div class="sum-val">90</div><div class="sum-lbl">Resolved</div></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-ic" style="background:#fff3cd"><i class="ti ti-clock" style="color:#e67e00"></i></div>
+        <div><div class="sum-val">30</div><div class="sum-lbl">In Progress</div></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-ic" style="background:#f3f0ff"><i class="ti ti-eye-off" style="color:#7b2ff7"></i></div>
+        <div><div class="sum-val">5</div><div class="sum-lbl">Not Viewed</div></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-ic" style="background:#e8f4ff"><i class="ti ti-robot" style="color:#0072ff"></i></div>
+        <div><div class="sum-val">72%</div><div class="sum-lbl">AI Rate</div></div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+      <div class="card-hdr">
+        <h3>All Tickets</h3>
+        <div class="toolbar">
+          <div class="search-wrap">
+            <i class="ti ti-search"></i>
+            <input type="text" placeholder="Search..." id="hSearch" oninput="filterHistory()">
+          </div>
+          <select class="filter-sel" id="hStatus" onchange="filterHistory()">
+            <option value="">All Status</option>
+            <option value="open">Open</option>
+            <option value="progress">In Progress</option>
+            <option value="solved">Solved</option>
+            <option value="notview">Not Viewed</option>
+          </select>
+          <select class="filter-sel" id="hPri" onchange="filterHistory()">
+            <option value="">All Priority</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Title</th><th>Category</th>
+            <th>Priority</th><th>Status</th><th>Created</th>
+            <th>Resolved</th><th>View</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <tr data-status="open" data-pri="High">
+            <td>#101</td><td>VPN Access Error</td><td>Network</td>
+            <td><span class="pri p-high"><i class="ti ti-flame"></i> High</span></td>
+            <td><span class="badge b-open">Open</span></td>
+            <td>Today, 9:12 AM</td><td>—</td>
+            <td><button class="act-btn act-view" onclick="openModal('101','VPN Access Error','Network','High','Open','Today 9:12 AM','—','VPN client failing to authenticate. Assigned to Raj Patel.')"><i class="ti ti-eye"></i></button></td>
+          </tr>
+          <tr data-status="solved" data-pri="Low">
+            <td>#102</td><td>Password Reset</td><td>Access</td>
+            <td><span class="pri p-low"><i class="ti ti-leaf"></i> Low</span></td>
+            <td><span class="badge b-solved">Solved</span></td>
+            <td>Today, 8:45 AM</td><td>Today, 9:10 AM</td>
+            <td><button class="act-btn act-view" onclick="openModal('102','Password Reset','Access','Low','Solved','Today 8:45 AM','Today 9:10 AM','Password was reset via Active Directory by the IT team.')"><i class="ti ti-eye"></i></button></td>
+          </tr>
+          <tr data-status="progress" data-pri="Medium">
+            <td>#103</td><td>Email Not Working</td><td>Email</td>
+            <td><span class="pri p-med"><i class="ti ti-alert-triangle"></i> Medium</span></td>
+            <td><span class="badge b-progress">In Progress</span></td>
+            <td>Yesterday</td><td>—</td>
+            <td><button class="act-btn act-view" onclick="openModal('103','Email Not Working','Email','Medium','In Progress','Yesterday','—','Outlook profile is corrupted. Engineer is rebuilding the profile.')"><i class="ti ti-eye"></i></button></td>
+          </tr>
+          <tr data-status="notview" data-pri="Medium">
+            <td>#104</td><td>Printer Offline – 3rd Floor</td><td>Hardware</td>
+            <td><span class="pri p-med"><i class="ti ti-alert-triangle"></i> Medium</span></td>
+            <td><span class="badge b-notview">Not Viewed</span></td>
+            <td>Yesterday</td><td>—</td>
+            <td><button class="act-btn act-view" onclick="openModal('104','Printer Offline – 3rd Floor','Hardware','Medium','Not Viewed','Yesterday','—','Ticket not yet picked up by any engineer.')"><i class="ti ti-eye"></i></button></td>
+          </tr>
+          <tr data-status="solved" data-pri="Low">
+            <td>#105</td><td>Software License Renewal</td><td>Software</td>
+            <td><span class="pri p-low"><i class="ti ti-leaf"></i> Low</span></td>
+            <td><span class="badge b-solved">Solved</span></td>
+            <td>Jun 20</td><td>Jun 21</td>
+            <td><button class="act-btn act-view" onclick="openModal('105','Software License Renewal','Software','Low','Solved','Jun 20','Jun 21','License renewed and activated by IT procurement team.')"><i class="ti ti-eye"></i></button></td>
+          </tr>
+          <tr data-status="open" data-pri="High">
+            <td>#100</td><td>New Laptop Setup Request</td><td>Hardware</td>
+            <td><span class="pri p-high"><i class="ti ti-flame"></i> High</span></td>
+            <td><span class="badge b-open">Open</span></td>
+            <td>Jun 18</td><td>—</td>
+            <td><button class="act-btn act-view" onclick="openModal('100','New Laptop Setup Request','Hardware','High','Open','Jun 18','—','Laptop ordered. Setup scheduled for Jun 25.')"><i class="ti ti-eye"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3>Ticket Details – <span id="mId"></span></h3>
+      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-row">
+        <div class="detail-lbl">Title</div>
+        <div class="detail-val" id="mTitle"></div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-lbl">Category</div>
+        <div class="detail-val" id="mCat"></div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-lbl">Priority</div>
+        <div class="detail-val" id="mPri"></div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-lbl">Status</div>
+        <div class="detail-val" id="mStat"></div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-lbl">Created</div>
+        <div class="detail-val" id="mCreated"></div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-lbl">Resolved</div>
+        <div class="detail-val" id="mResolved"></div>
+      </div>
+      <div class="detail-row" style="border:none;padding:0;margin:0">
+        <div class="detail-lbl">Notes</div>
+        <div class="detail-val" id="mNotes"></div>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-title">Activity Timeline</div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#e8f4ff"><i class="ti ti-plus" style="color:#0072ff"></i></div>
+        <div>
+          <div class="tl-text">Ticket created by <strong>Arjun Kumar</strong></div>
+          <div class="tl-time" id="tl1"></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#f3f0ff"><i class="ti ti-robot" style="color:#7b2ff7"></i></div>
+        <div>
+          <div class="tl-text">AI classified and category assigned</div>
+          <div class="tl-time">Auto — within seconds</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#d4f7ea"><i class="ti ti-user-check" style="color:#038c5a"></i></div>
+        <div>
+          <div class="tl-text">Assigned to IT Engineer</div>
+          <div class="tl-time">Within 30 minutes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+initSidebar('history');
+
+function filterHistory(){
+  const q   = document.getElementById('hSearch').value.toLowerCase();
+  const st  = document.getElementById('hStatus').value;
+  const pri = document.getElementById('hPri').value;
+  document.querySelectorAll('#historyBody tr').forEach(row=>{
+    const title  = row.cells[1].textContent.toLowerCase();
+    const rStat  = row.dataset.status;
+    const rPri   = row.dataset.pri;
+    const mSt    = !st  || rStat === st;
+    const mPri   = !pri || rPri  === pri;
+    const mQ     = title.includes(q);
+    row.style.display = (mSt && mPri && mQ) ? '' : 'none';
+  });
+}
+
+function openModal(id,title,cat,pri,stat,created,resolved,notes){
+  document.getElementById('mId').textContent      = '#'+id;
+  document.getElementById('mTitle').textContent   = title;
+  document.getElementById('mCat').textContent     = cat;
+  document.getElementById('mPri').textContent     = pri;
+  document.getElementById('mStat').textContent    = stat;
+  document.getElementById('mCreated').textContent = created;
+  document.getElementById('mResolved').textContent= resolved;
+  document.getElementById('mNotes').textContent   = notes;
+  document.getElementById('tl1').textContent      = created;
+  document.getElementById('detailModal').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('detailModal').classList.remove('show');
+}
+</script>
+</body>
+</html>
